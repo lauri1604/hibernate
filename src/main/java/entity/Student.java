@@ -2,6 +2,9 @@ package entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "students")
 public class Student {
@@ -19,6 +22,15 @@ public class Student {
 
     @Column(name = "phone")
     private String phone;
+
+    @ManyToMany
+    @JoinTable(name = "student_course",
+    joinColumns = @JoinColumn(name = "idcourse"),
+    inverseJoinColumns = @JoinColumn(name = "idstudent"))
+    private List<Course> courses = new ArrayList<>();
+
+    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
+    private Card card;
 
     public String getName() {
         return name;
@@ -56,5 +68,25 @@ public class Student {
             return this.id.equals(student.id) && this.dni.equals(student.dni);
         }
         return false;
+    }
+
+    public Card getCard() {
+        return card;
+    }
+
+    public void setCard(Card card) {
+        this.card = card;
+    }
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
     }
 }
